@@ -17,13 +17,16 @@ public class TASDatabase {
     private PreparedStatement pstSelect = null;
     private ResultSet resultset = null;
     private ResultSetMetaData metadata = null;
+    private Punch punchDB = null;
+    private Badge badgeDB = null;
+    private Shift shiftDB = null;
     
     public TASDatabase(){
         server = ("jdbc:mysql://localhost/TAS_FA19");
         username = "A";
         password = "abc123";
     }
-    
+    // V delete this later V
     public JSONArray getJSONData(){
         
         String[] headerName = {"badge", "shift"};
@@ -121,7 +124,7 @@ public class TASDatabase {
             return null;
         }
         
-        return null;
+        return shiftDB;
     }
     
     /*Grabs the Punch data*/
@@ -137,7 +140,7 @@ public class TASDatabase {
             return null;
         }
         
-        return null;
+        return punchDB;
     }
     
     /*Grabs the Badge data*/
@@ -153,7 +156,7 @@ public class TASDatabase {
             return null;
         }
   
-        return null;
+        return badgeDB;
     }
     
 }
