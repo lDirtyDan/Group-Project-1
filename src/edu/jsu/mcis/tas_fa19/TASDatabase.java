@@ -110,19 +110,49 @@ public class TASDatabase {
     
     /*Grabs the Shift data*/
     public Shift getShift(){
+        Close();
+        try {
+            Open();
+            
+            Close();
+        }
+        
+        catch (Exception e){
+            return null;
+        }
         
         return null;
     }
     
     /*Grabs the Punch data*/
     public Punch getPunch(){
-    
+        Close();
+        try {
+            Open();
+            
+            Close();
+        }
+        
+        catch (Exception e){
+            return null;
+        }
+        
         return null;
     }
     
     /*Grabs the Badge data*/
     public Badge getBadge(){
-    
+        Close();
+        try {
+            Open();
+            
+            Close();
+        }
+        
+        catch (Exception e){
+            return null;
+        }
+  
         return null;
     }
     
