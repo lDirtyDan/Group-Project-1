@@ -94,8 +94,7 @@ public class TASDatabase {
                     if (hasresults) {
                         resultset = pstSelect.getResultSet();
                         metadata = resultset.getMetaData();
-   
-                        /*Sets badgeDB to the selected ID and Description*/
+                        
                         while(resultset.next()){
                             shiftID = resultset.getInt("id");
                             shiftDesc = resultset.getString("description");
@@ -149,7 +148,6 @@ public class TASDatabase {
                         resultset = pstSelect.getResultSet();
                         metadata = resultset.getMetaData();
    
-                        /*Sets badgeDB to the selected ID and Description*/
                         while(resultset.next()){
                             shiftID = resultset.getInt("shiftid");
                         
@@ -197,7 +195,6 @@ public class TASDatabase {
                         resultset = pstSelect.getResultSet();
                         metadata = resultset.getMetaData();
    
-                        /*Sets badgeDB to the selected ID and Description*/
                         while(resultset.next()){
                             badgeID = resultset.getString("badgeid");
                             
@@ -252,7 +249,6 @@ public class TASDatabase {
                         resultset = pstSelect.getResultSet();
                         metadata = resultset.getMetaData();
    
-                        /*Sets badgeDB to the selected ID and Description*/
                         while(resultset.next()){
                             badgeID = resultset.getString("id");
                             badgeDesc = resultset.getString("description");
