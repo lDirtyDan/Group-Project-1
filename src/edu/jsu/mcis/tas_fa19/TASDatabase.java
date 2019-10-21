@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -12,21 +11,20 @@ import java.util.TimeZone;
 
 public class TASDatabase {
     
-    private String query, key, value;
+    private String query = null;
     private String server = null;
     private String username = null;
     private String password = null;
     private Connection conn = null;
     private PreparedStatement pstSelect = null;
     private ResultSet resultset = null;
-    private ResultSetMetaData metadata = null;
     private Punch punchDB = null;
     private Badge badgeDB = null;
     private Shift shiftDB = null;
     private boolean hasresults;
     
     public TASDatabase(){
-        server = ("jdbc:mysql://localhost/TAS_FA19");
+        server = ("jdbc:mysql://localhost/tas");
         username = "A";
         password = "abc123";
     }
@@ -38,22 +36,6 @@ public class TASDatabase {
         }
         catch(Exception e) { System.out.println("Connection could not be closed."); } 
         System.out.println("Connection closed.");
-    }
-    
-    /*This returns relevant objects to null so there is no conflicts.*/
-    private void NullifyRelevant(){
-    
-        query = null;
-        key = null;
-        value = null;
-        pstSelect = null;
-        resultset = null;
-        metadata = null;
-        punchDB = null;
-        badgeDB = null;
-        shiftDB = null;
-        hasresults = false;
-        
     }
     
     private LocalDateTime longToLocalDateTime(long longTime){
@@ -71,13 +53,13 @@ public class TASDatabase {
         
         int shiftID;
         String shiftDesc = null;
-        LocalTime shiftStart;
-        LocalTime shiftStop;
+        LocalTime shiftStart = null;
+        LocalTime shiftStop = null;
         int interval;
         int gracePeriod;
         int dock;
-        LocalTime lunchStart;
-        LocalTime lunchStop;
+        LocalTime lunchStart = null;
+        LocalTime lunchStop = null;
         int lunchDeduct;
         
         try {
@@ -93,7 +75,6 @@ public class TASDatabase {
                 while (hasresults || pstSelect.getUpdateCount() != -1) {
                     if (hasresults) {
                         resultset = pstSelect.getResultSet();
-                        metadata = resultset.getMetaData();
                         
                         while(resultset.next()){
                             shiftID = resultset.getInt("id");
@@ -112,7 +93,7 @@ public class TASDatabase {
                     }
                 }
                 
-                
+                hasresults = pstSelect.getMoreResults();
             }
             Close();
         }
@@ -125,8 +106,6 @@ public class TASDatabase {
     }
     
      public Shift getShift(Badge badgeLocal){
-            
-        shiftDB = null;
         
         int shiftID;
         String badgeID = null;
@@ -146,7 +125,6 @@ public class TASDatabase {
                 while (hasresults || pstSelect.getUpdateCount() != -1) {
                     if (hasresults) {
                         resultset = pstSelect.getResultSet();
-                        metadata = resultset.getMetaData();
    
                         while(resultset.next()){
                             shiftID = resultset.getInt("shiftid");
@@ -157,7 +135,7 @@ public class TASDatabase {
                     }
                 }
                 
-                
+                hasresults = pstSelect.getMoreResults();
             }
             Close();
         }
@@ -172,8 +150,6 @@ public class TASDatabase {
     
     /*Grabs the Punch data*/
     public Punch getPunch(int id){
-        
-        NullifyRelevant();
         
         String badgeID = null;
         long timeStamp;
@@ -193,7 +169,6 @@ public class TASDatabase {
                 while (hasresults || pstSelect.getUpdateCount() != -1) {
                     if (hasresults) {
                         resultset = pstSelect.getResultSet();
-                        metadata = resultset.getMetaData();
    
                         while(resultset.next()){
                             badgeID = resultset.getString("badgeid");
@@ -214,7 +189,7 @@ public class TASDatabase {
                     }
                 }
                 
-                
+                hasresults = pstSelect.getMoreResults();
             }
             Close();
         }
@@ -228,8 +203,6 @@ public class TASDatabase {
     
     /*Grabs the Badge data*/
     public Badge getBadge(String id){
-        
-        NullifyRelevant();
         
         String badgeID = null;
         String badgeDesc = null;
@@ -247,9 +220,9 @@ public class TASDatabase {
                 while (hasresults || pstSelect.getUpdateCount() != -1) {
                     if (hasresults) {
                         resultset = pstSelect.getResultSet();
-                        metadata = resultset.getMetaData();
    
                         while(resultset.next()){
+                            System.out.println("next");
                             badgeID = resultset.getString("id");
                             badgeDesc = resultset.getString("description");
                         
@@ -259,7 +232,7 @@ public class TASDatabase {
                     }
                 }
                 
-                
+                hasresults = pstSelect.getMoreResults();
             }
             Close();
         }

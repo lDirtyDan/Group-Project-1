@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 import java.util.TimeZone;
 
 public class Punch {
-    private Badge badge;
+    private Badge badge = null;
     private int terminalid;
     private int punchtypeid;
-    private LocalDateTime originalTimeStamp;
+    private LocalDateTime originalTimeStamp = null;
     private int id = 0;
-    private String adjustmenttype;
+    private String adjustmenttype = null;
     
     public Punch(Badge badge, int terminalid, int punchtypeid){
         this.badge = badge;
@@ -52,7 +52,9 @@ public class Punch {
     }
     
     public void setBadge(Badge badge) {
-        this.badge = badge;
+        if(badge != null){
+            this.badge = badge;
+        }
     }
 
     public void setTerminalid(int terminalid) {
@@ -64,7 +66,9 @@ public class Punch {
     }
 
     public void setOriginalTimeStamp(LocalDateTime originalTimeStamp) {
-        this.originalTimeStamp = originalTimeStamp;
+        if(originalTimeStamp != null){
+            this.originalTimeStamp = originalTimeStamp;
+        }
     }
 
     public void setId(int id) {
@@ -72,7 +76,9 @@ public class Punch {
     }
 
     public void setAdjustmenttype(String adjustmenttype) {
-        this.adjustmenttype = adjustmenttype;
+        if(adjustmenttype != null){
+            this.adjustmenttype = adjustmenttype;
+        }
     }
 
     public String printOriginalTimestamp() {

@@ -4,14 +4,14 @@ import java.time.LocalTime;
 
 public class Shift {
     private int id;
-    private String description;
-    private LocalTime start;
-    private LocalTime stop;
+    private String description = null;
+    private LocalTime start = null;
+    private LocalTime stop = null;
     private int interval;
     private int gracePeriod;
     private int dock;
-    private LocalTime lunchStart;
-    private LocalTime lunchStop;
+    private LocalTime lunchStart = null;
+    private LocalTime lunchStop = null;
     private int lunchDeduct;
     private int lunchDuration;
     

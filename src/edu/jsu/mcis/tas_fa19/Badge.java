@@ -2,8 +2,8 @@ package edu.jsu.mcis.tas_fa19;
 
 
 public class Badge {
-    private String id;
-    private String description;
+    private String id = null;
+    private String description = null;;
 
     public Badge(String id, String description) {
         this.id = id;
