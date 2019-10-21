@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.LocalTime;
 import java.util.TimeZone;
 //Feature 2 Imports
@@ -52,6 +53,13 @@ public class TASDatabase {
     
     }
     
+    private LocalTime longToLocalTime(long longTime){
+        
+        LocalTime timeStamp = Instant.ofEpochMilli(longTime).atZone(ZoneId.systemDefault()).toLocalTime();
+        return timeStamp;
+    
+    }
+    
     /*Grabs the Shift data*/
     
     public Shift getShift(int id){
@@ -86,23 +94,23 @@ public class TASDatabase {
                         while(resultset.next()){
                             shiftID = resultset.getInt("id");
                             shiftDesc = resultset.getString("description");
-                            shiftStart = longToLocalDateTime(resultset.getLong("start")).toLocalTime();
-                            shiftStop = longToLocalDateTime(resultset.getLong("start")).toLocalTime();
+                            shiftStart = longToLocalTime(resultset.getLong("start"));
+                            shiftStop = longToLocalTime(resultset.getLong("stop"));
                             interval = resultset.getInt("interval");
                             gracePeriod = resultset.getInt("gracePeriod");
                             dock = resultset.getInt("dock");
-                            lunchStart = longToLocalDateTime(resultset.getLong("lunchstart")).toLocalTime();
-                            lunchStop = longToLocalDateTime(resultset.getLong("lunchstop")).toLocalTime();
+                            lunchStart = longToLocalTime(resultset.getLong("lunchstart"));
+                            lunchStop = longToLocalTime(resultset.getLong("lunchstop"));
                             lunchDeduct = resultset.getInt("lunchdeduct");
                             
                             shiftDB = new Shift(shiftID,shiftDesc,shiftStart,shiftStop,interval,gracePeriod,dock,lunchStart,lunchStop,lunchDeduct);
                         }
                     }
+                    
+                    hasresults = pstSelect.getMoreResults();
                 }
-                
-                hasresults = pstSelect.getMoreResults();
             }
-            Close();
+            conn.close();
         }
         
         catch (Exception e){
@@ -144,7 +152,7 @@ public class TASDatabase {
                 
                 hasresults = pstSelect.getMoreResults();
             }
-            Close();
+            conn.close();
         }
         
         catch (Exception e){
@@ -180,13 +188,11 @@ public class TASDatabase {
                         while(resultset.next()){
                             badgeID = resultset.getString("badgeid");
                             
-                            getBadge(badgeID);
-                            
                             timeStamp = resultset.getLong("longtimestamp");
                             termID = resultset.getInt("terminalid");
                             punchType = resultset.getInt("punchtypeid");
                             
-                            punchDB = new Punch(badgeDB, termID, punchType);
+                            punchDB = new Punch(getBadge(badgeID), termID, punchType);
                                 
                             
                             punchDB.setOriginalTimeStamp(longToLocalDateTime(timeStamp));
@@ -194,11 +200,11 @@ public class TASDatabase {
                         }
                         
                     }
+                    
+                    hasresults = pstSelect.getMoreResults();
                 }
-                
-                hasresults = pstSelect.getMoreResults();
             }
-            Close();
+            conn.close();
         }
         
         catch (Exception e){
@@ -229,7 +235,6 @@ public class TASDatabase {
                         resultset = pstSelect.getResultSet();
    
                         while(resultset.next()){
-                            System.out.println("next");
                             badgeID = resultset.getString("id");
                             badgeDesc = resultset.getString("description");
                         
@@ -237,11 +242,11 @@ public class TASDatabase {
                         }
                         
                     }
+                    
+                    hasresults = pstSelect.getMoreResults();
                 }
-                
-                hasresults = pstSelect.getMoreResults();
             }
-            Close();
+            conn.close();
         }
         
         catch (Exception e){

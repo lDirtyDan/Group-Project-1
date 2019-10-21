@@ -116,7 +116,7 @@ public class Shift {
 
     @Override
     public String toString() {
-        return description + start + " - " + stop + "(" + stop.compareTo(start) + "minutes); Lunch:" + lunchStart + " - " + lunchStop + "(" + lunchStop.compareTo(lunchStart) + "minutes)";
+        return description + start + " - " + stop + "(" + stop.compareTo(start) + " minutes); Lunch:" + lunchStart + " - " + lunchStop + "(" + lunchStop.compareTo(lunchStart) + " minutes)";
     }
 
     
