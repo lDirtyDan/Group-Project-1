@@ -8,6 +8,13 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.TimeZone;
+//Feature 2 Imports
+import java.util.GregorianCalendar;
+import java.util.Calendar;
+import org.junit.*;
+import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 
 public class TASDatabase {
     
@@ -242,6 +249,24 @@ public class TASDatabase {
         }
   
         return badgeDB;
+    }
+    
+    
+    
+    //Feature 2
+    
+    public int insertPunch(Punch p){
+        //use a getter method to extract a punch data from a object
+        //insert that data into the database as a new punch
+        //should return ID of the new punch as an Integar
+        
+        
+    }
+    
+    public ArrayList<Punch> getDailyPunchList (Badge badge, long ts){
+        //should retrieve a list of all punches entered under the given badge within the day in which the timestamp occurred
+        //The punches should be added to the list as individual Punch objects
+        
     }
     
 }
