@@ -10,12 +10,9 @@ import java.time.ZoneId;
 import java.time.LocalTime;
 import java.util.TimeZone;
 //Feature 2 Imports
-import java.util.GregorianCalendar;
-import java.util.Calendar;
 import org.junit.*;
-import static org.junit.Assert.*;
 import java.util.ArrayList;
-import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 
 public class TASDatabase {
     
@@ -265,7 +262,10 @@ public class TASDatabase {
         //insert that data into the database as a new punch
         //should return ID of the new punch as an Integar
         
+        Punch p1 = new Punch.getPunch();
         
+        GregorianCalendar ots = new GregorianCalendar();
+        GregorianCalendar rts = new GregorianCalendar();
     }
     
     public ArrayList<Punch> getDailyPunchList (Badge badge, long ts){
