@@ -1,11 +1,14 @@
 package edu.jsu.mcis.tas_fa19;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.TimeZone;
 
 public class Punch {
     private Badge badge;
     private int terminalid;
     private int punchtypeid;
-    private long originalTimeStamp = 0;
+    private LocalDateTime originalTimeStamp;
     private int id = 0;
     private String adjustmenttype;
     
@@ -13,6 +16,13 @@ public class Punch {
         this.badge = badge;
         this.terminalid = terminalid;
         this.punchtypeid = punchtypeid;
+        
+        /*changes adjustmenttype to specified string based punchtypeid*/
+        switch(punchtypeid){
+            case 0: adjustmenttype = "CLOCKED OUT";
+            case 1: adjustmenttype = "CLOCKED IN";
+            case 2: adjustmenttype = "TIMED OUT";
+        }
     }
 
     public Badge getBadge() {
@@ -27,7 +37,7 @@ public class Punch {
         return punchtypeid;
     }
 
-    public long getOriginalTimeStamp() {
+    public LocalDateTime getOriginalTimeStamp() {
         return originalTimeStamp;
     }
 
@@ -53,7 +63,7 @@ public class Punch {
         this.punchtypeid = punchtypeid;
     }
 
-    public void setOriginalTimeStamp(long originalTimeStamp) {
+    public void setOriginalTimeStamp(LocalDateTime originalTimeStamp) {
         this.originalTimeStamp = originalTimeStamp;
     }
 
@@ -66,7 +76,7 @@ public class Punch {
     }
 
     public String printOriginalTimestamp() {
-        return adjustmenttype + " : " + originalTimeStamp;
+        return "#" + badge.getId() + " " + adjustmenttype + ": " + originalTimeStamp;
     }
     
     
