@@ -1,6 +1,7 @@
 package edu.jsu.mcis.tas_fa19;
 
 import java.time.LocalTime;
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 public class Shift {
     private int id;
@@ -116,7 +117,7 @@ public class Shift {
 
     @Override
     public String toString() {
-        return description + start + " - " + stop + "(" + stop.compareTo(start) + " minutes); Lunch:" + lunchStart + " - " + lunchStop + "(" + lunchStop.compareTo(lunchStart) + " minutes)";
+        return description +": "+ start + " - " + stop + " (" + MINUTES.between(start, stop) + " minutes); Lunch: " + lunchStart + " - " + lunchStop + " (" + MINUTES.between(lunchStart, lunchStop) + " minutes)";
     }
 
     

@@ -50,13 +50,6 @@ public class TASDatabase {
     
     }
     
-    private LocalTime longToLocalTime(long longTime){
-        
-        LocalTime timeStamp = Instant.ofEpochMilli(longTime).atZone(ZoneId.systemDefault()).toLocalTime();
-        return timeStamp;
-    
-    }
-    
     /*Grabs the Shift data*/
     
     public Shift getShift(int id){
@@ -79,7 +72,11 @@ public class TASDatabase {
             conn = DriverManager.getConnection(server, username, password);
             if (conn.isValid(0)) {
                 /*Command sent to MySQL Database to search for specified id*/
-                query = "SELECT * FROM shift WHERE id = '"+ id +"'";
+                query = "SELECT *, UNIX_TIMESTAMP(start) * 1000 AS starttime, "
+                        + "UNIX_TIMESTAMP(stop) * 1000 AS stoptime, "
+                        + "UNIX_TIMESTAMP(lunchstart) * 1000 AS lunchstarttime, "
+                        + "UNIX_TIMESTAMP(lunchstop) * 1000 AS lunchstoptime "
+                        + "FROM shift WHERE id = '"+ id +"'";
                 pstSelect = conn.prepareStatement(query);
                 hasresults = pstSelect.execute();
                 
@@ -91,13 +88,13 @@ public class TASDatabase {
                         while(resultset.next()){
                             shiftID = resultset.getInt("id");
                             shiftDesc = resultset.getString("description");
-                            shiftStart = longToLocalTime(resultset.getLong("start"));
-                            shiftStop = longToLocalTime(resultset.getLong("stop"));
+                            shiftStart = longToLocalDateTime(resultset.getLong("starttime")).toLocalTime();
+                            shiftStop = longToLocalDateTime(resultset.getLong("stoptime")).toLocalTime();
                             interval = resultset.getInt("interval");
                             gracePeriod = resultset.getInt("gracePeriod");
                             dock = resultset.getInt("dock");
-                            lunchStart = longToLocalTime(resultset.getLong("lunchstart"));
-                            lunchStop = longToLocalTime(resultset.getLong("lunchstop"));
+                            lunchStart =longToLocalDateTime(resultset.getLong("lunchstarttime")).toLocalTime();
+                            lunchStop = longToLocalDateTime(resultset.getLong("lunchstoptime")).toLocalTime();
                             lunchDeduct = resultset.getInt("lunchdeduct");
                             
                             shiftDB = new Shift(shiftID,shiftDesc,shiftStart,shiftStop,interval,gracePeriod,dock,lunchStart,lunchStop,lunchDeduct);
