@@ -189,7 +189,7 @@ public class TASDatabase {
                             punchDB = new Punch(getBadge(badgeID), termID, punchType);
                                 
                             
-                            punchDB.setOriginalTimeStamp(longToLocalDateTime(timeStamp));
+                            punchDB.setOriginalTimeStamp(timeStamp);
                             
                         }
                         
@@ -253,7 +253,7 @@ public class TASDatabase {
     
     
     //Feature 2
-    
+ 
     public int insertPunch(Punch p){
         //use a getter method to extract a punch data from a object
         //insert that data into the database as a new punch

@@ -4,13 +4,15 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 public class Punch {
     private Badge badge = null;
     private int terminalid;
     private int punchtypeid;
-    private LocalDateTime originalTimeStamp = null;
+    private GregorianCalendar originalTimeStamp = new GregorianCalendar();
+    private LocalDateTime LDTTimeStamp = null;
     private int id = 0;
     private String adjustmenttype = null;
     
@@ -42,7 +44,7 @@ public class Punch {
         return punchtypeid;
     }
 
-    public LocalDateTime getOriginalTimeStamp() {
+    public GregorianCalendar getOriginalTimeStamp() {
         return originalTimeStamp;
     }
 
@@ -70,10 +72,8 @@ public class Punch {
         this.punchtypeid = punchtypeid;
     }
 
-    public void setOriginalTimeStamp(LocalDateTime originalTimeStamp) {
-        if(originalTimeStamp != null){
-            this.originalTimeStamp = originalTimeStamp;
-        }
+    public void setOriginalTimeStamp(long timeStamp) {
+        originalTimeStamp.setTimeInMillis(timeStamp*100);
     }
 
     public void setId(int id) {
@@ -84,6 +84,13 @@ public class Punch {
         if(adjustmenttype != null){
             this.adjustmenttype = adjustmenttype;
         }
+    }
+    
+    private LocalDateTime longToLocalDateTime(long longTime){
+        
+        LocalDateTime timeStamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(longTime), TimeZone.getDefault().toZoneId());
+        return timeStamp;
+    
     }
     
     public String getWeekDayShort(LocalDateTime originalTimeStamp){
@@ -148,8 +155,12 @@ public class Punch {
 
 
     public String printOriginalTimestamp() {
+         long timeLong = originalTimeStamp.getTimeInMillis();
+         timeLong = timeLong/100;
+         LDTTimeStamp = longToLocalDateTime(timeLong);
+         
+        return "#" + badge.getId() + " " + adjustmenttype + ": " + getWeekDayShort(LDTTimeStamp).toUpperCase() +" "+ formatDate(LDTTimeStamp) + formatTime(LDTTimeStamp);
         
-        return "#" + badge.getId() + " " + adjustmenttype + ": " + getWeekDayShort(originalTimeStamp).toUpperCase() +" "+ formatDate(originalTimeStamp) + formatTime(originalTimeStamp);
     }
     
     
