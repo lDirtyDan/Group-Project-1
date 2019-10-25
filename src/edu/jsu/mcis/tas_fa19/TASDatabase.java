@@ -13,6 +13,7 @@ import java.util.TimeZone;
 import org.junit.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.logging.Logger;
 
 public class TASDatabase {
     
@@ -21,11 +22,13 @@ public class TASDatabase {
     private String username = null;
     private String password = null;
     private Connection conn = null;
-    private PreparedStatement pstSelect = null;
+    private PreparedStatement pstSelect = null, pstUpdate = null;
     private ResultSet resultset = null;
     private Punch punchDB = null;
     private Badge badgeDB = null;
-    private Shift shiftDB = null;
+    private Shift shiftDB = null, Statement = stmt;
+    private String RETURN_GENERATED_KEYS = null;
+    int updateCount = 0;
     private boolean hasresults;
     
     public TASDatabase(){
@@ -259,16 +262,60 @@ public class TASDatabase {
         //insert that data into the database as a new punch
         //should return ID of the new punch as an Integar
         
-        Punch p1 = new Punch.getPunch();
+
         
-        GregorianCalendar ots = new GregorianCalendar();
-        GregorianCalendar rts = new GregorianCalendar();
+    String badgeid = p.getBadgeid();
+    int terminalid = p.getTerminalid();
+    int punchtypeid = p.getPunchtypeid();
+    int id = 0;
+    
+    try
+    {
+       
+        query = "INSERT INTO punch(badgeid, terminalid, punchtypeid) VALUES ('" + badgeid + "', " + terminalid + ", " + punchtypeid + ")";
+        pstUpdate = conn.prepareStatement(query, punchtypeid);
+                    
+                    // Execute Update Query
+
+                    updateCount = pstUpdate.executeUpdate();
+
+                    // Get New Key; Print To Console
+
+                    if (updateCount > 0) {
+
+                        resultset = pstUpdate.getGeneratedKeys();
+
+                        if (resultset.next()) {
+                            
+                            id = resultset.getInt(1);
+                            
+                            p.setId(id);
+                            
+                            return id;
+
+                        }
+
+                    }
+
     }
+    
+    catch (Exception e) 
+    {
+            //System.err.println("Unable to connect to the database");
+            System.err.println(e.toString());
+    }
+    
+    return id;
+    
+}
+    
+    
     
     public ArrayList<Punch> getDailyPunchList (Badge badge, long ts){
         //should retrieve a list of all punches entered under the given badge within the day in which the timestamp occurred
         //The punches should be added to the list as individual Punch objects
         
-    }
+    
     
 }
+    

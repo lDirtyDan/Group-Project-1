@@ -35,6 +35,10 @@ public class Punch {
     public Badge getBadge() {
         return badge;
     }
+    
+    public String getBadgeid(){
+        return badge.getId();
+    }
 
     public int getTerminalid() {
         return terminalid;

@@ -32,7 +32,9 @@ public class Shift {
     public int getId() {
         return id;
     }
-
+    public int setId(){
+        return id;
+    }
     public String getDescription() {
         return description;
     }
