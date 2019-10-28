@@ -317,7 +317,6 @@ public class TASDatabase {
         //The punches should be added to the list as individual Punch objects
         String badgeid = badge.getId();
         ArrayList<Punch> list = new ArrayList();
-        Punch punchLoc = null;
         GregorianCalendar origTimeStamp = new GregorianCalendar();
         origTimeStamp.setTimeInMillis(ts);
         String originaltimestamp = (new SimpleDateFormat("yyyy-MM-dd ")).format(origTimeStamp.getTime());
@@ -325,9 +324,6 @@ public class TASDatabase {
         String stopTime = originaltimestamp;
         startTime = startTime.concat("00:00:00");
         stopTime = stopTime.concat("23:59:59");
-        long timeStamp;
-        int punchType;
-        int termID;
         
         
         try {
@@ -349,10 +345,9 @@ public class TASDatabase {
                         resultset = pstSelect.getResultSet();
    
                         while(resultset.next()){
-                            int id = Integer.parseInt(badgeid);
-                            punchLoc = getPunch(id);
+                            int id = resultset.getInt("id");
                             
-                            list.add(punchLoc);
+                            list.add(getPunch(id));
                         }
                         
                     }
