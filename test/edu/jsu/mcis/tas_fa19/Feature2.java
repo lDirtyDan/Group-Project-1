@@ -44,7 +44,8 @@ public class Feature2 {
 		
         /* Retrieve New Punch */
         
-        Punch p2 = db.getPunch(punchid);	
+        Punch p2 = db.getPunch(punchid);
+		
         /* Compare Punches */
 
         assertEquals(badgeid, p2.getBadgeid());
@@ -53,7 +54,6 @@ public class Feature2 {
         
         assertEquals(originaltimestamp, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(rts.getTime()));
         assertEquals(terminalid, p2.getTerminalid());
-	
         assertEquals(eventtypeid, p2.getPunchtypeid());
         
     }
