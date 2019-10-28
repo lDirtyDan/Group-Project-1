@@ -10,7 +10,6 @@ import java.time.ZoneId;
 import java.time.LocalTime;
 import java.util.TimeZone;
 //Feature 2 Imports
-import org.junit.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
@@ -26,7 +25,7 @@ public class TASDatabase {
     private ResultSet resultset = null;
     private Punch punchDB = null;
     private Badge badgeDB = null;
-    private Shift shiftDB = null, Statement = stmt;
+    private Shift shiftDB = null;
     private String RETURN_GENERATED_KEYS = null;
     int updateCount = 0;
     private boolean hasresults;
@@ -316,6 +315,7 @@ public class TASDatabase {
         //The punches should be added to the list as individual Punch objects
         
     
-    
+        return null;
+    }
 }
     
