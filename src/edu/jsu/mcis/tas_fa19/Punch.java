@@ -101,10 +101,6 @@ public class Punch {
         String weekDay = null;
         weekDay = originalTimeStamp.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US).toUpperCase();
         
-        /*if(weekDay.contains("WED")){
-           weekDay = "WED";
-        }*/
-        
         return weekDay;
     }
     
