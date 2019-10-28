@@ -48,7 +48,7 @@ public class Punch {
         return punchtypeid;
     }
 
-    public GregorianCalendar getOriginalTimeStamp() {
+    public GregorianCalendar getOriginaltimestamp() {
         return originalTimeStamp;
     }
 
