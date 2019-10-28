@@ -37,7 +37,10 @@ public class Punch {
     }
     
     public String getBadgeid(){
-        return badge.getId();
+        if(badge != null){
+            return badge.getId();
+        }
+        return "Incorrect";
     }
 
     public int getTerminalid() {
@@ -48,8 +51,8 @@ public class Punch {
         return punchtypeid;
     }
 
-    public GregorianCalendar getOriginaltimestamp() {
-        return originalTimeStamp;
+    public long getOriginaltimestamp() {
+        return originalTimeStamp.getTimeInMillis();
     }
 
     public int getId() {

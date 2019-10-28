@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -13,6 +14,7 @@ import java.util.TimeZone;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
+import java.text.SimpleDateFormat;
 
 public class TASDatabase {
     
@@ -313,9 +315,59 @@ public class TASDatabase {
     public ArrayList<Punch> getDailyPunchList (Badge badge, long ts){
         //should retrieve a list of all punches entered under the given badge within the day in which the timestamp occurred
         //The punches should be added to the list as individual Punch objects
+        String badgeid = badge.getId();
+        ArrayList<Punch> list = new ArrayList();
+        Punch punchLoc = null;
+        GregorianCalendar origTimeStamp = new GregorianCalendar();
+        origTimeStamp.setTimeInMillis(ts);
+        String originaltimestamp = (new SimpleDateFormat("yyyy-MM-dd ")).format(origTimeStamp.getTime());
+        String startTime = originaltimestamp;
+        String stopTime = originaltimestamp;
+        startTime = startTime.concat("00:00:00");
+        stopTime = stopTime.concat("23:59:59");
+        long timeStamp;
+        int punchType;
+        int termID;
         
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection(server, username, password);
+            if (conn.isValid(0)) {
+                /*Command sent to MySQL Database to search for specified id*/
+                query = "SELECT *, UNIX_TIMESTAMP(ORIGINALTIMESTAMP) * 1000 AS longtimestamp FROM punch WHERE badgeid = ? AND originaltimestamp BETWEEN ? AND ?";
+                pstUpdate = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                pstUpdate.setString(1, badgeid);
+                pstUpdate.setString(2,startTime);
+                pstUpdate.setString(3,stopTime);
+                pstSelect = conn.prepareStatement(query);
+                hasresults = pstSelect.execute();
+                
+                /*Gathers the specified data from the MySQL Database*/
+                while (hasresults || pstSelect.getUpdateCount() != -1) {
+                    if (hasresults) {
+                        resultset = pstSelect.getResultSet();
+   
+                        while(resultset.next()){
+                            int id = Integer.parseInt(badgeid);
+                            punchLoc = getPunch(id);
+                            
+                            list.add(punchLoc);
+                        }
+                        
+                    }
+                    
+                    hasresults = pstSelect.getMoreResults();
+                }
+            }
+            conn.close();
+        }
+        
+        catch (Exception e){
+            return list;
+        }
     
-        return null;
+        return list;
     }
 }
     
