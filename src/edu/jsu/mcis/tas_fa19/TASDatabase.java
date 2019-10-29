@@ -343,7 +343,7 @@ public class TASDatabase {
                 pstSelect = conn.prepareStatement(query);
                 hasresults = pstSelect.execute();
                 
-                /*Gathers the specified data from the MySQL Database*/
+                /*Gathers the specified data from the MySQL Database and adds it to an array*/
                 while (hasresults || pstSelect.getUpdateCount() != -1) {
                     if (hasresults) {
                         resultset = pstSelect.getResultSet();
