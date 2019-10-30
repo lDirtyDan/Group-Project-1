@@ -18,11 +18,15 @@ import java.text.SimpleDateFormat;
 
 public class TASDatabase {
     
+    
+    /*Change values to local function*/
     private String query = null;
     private String server = null;
     private String username = null;
     private String password = null;
+    
     private Connection conn = null;
+    
     private PreparedStatement pstSelect = null, pstUpdate = null;
     private ResultSet resultset = null;
     private Punch punchDB = null;
@@ -332,36 +336,31 @@ public class TASDatabase {
             if (conn.isValid(0)) {
                 /*Command sent to MySQL Database to search for specified badgeid and timestamp*/
                 query = "SELECT *, UNIX_TIMESTAMP(ORIGINALTIMESTAMP) * 1000 AS longtimestamp FROM punch WHERE badgeid = ? AND originaltimestamp BETWEEN ? AND ?";
-                pstUpdate = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-                pstUpdate.setString(1, badgeid);
-                pstUpdate.setString(2,startTime);
-                pstUpdate.setString(3,stopTime);
                 pstSelect = conn.prepareStatement(query);
+                pstSelect.setString(1, badgeid);
+                pstSelect.setString(2,startTime);
+                pstSelect.setString(3,stopTime);
+                //System.out.println(query);
                 hasresults = pstSelect.execute();
-                
                 /*Gathers the specified data from the MySQL Database and adds it to an array*/
-                while (hasresults || pstSelect.getUpdateCount() != -1) {
-                    if (hasresults) {
-                        resultset = pstSelect.getResultSet();
+                if (hasresults == true) {
+                    ResultSet resultset = pstSelect.getResultSet();
    
-                        while(resultset.next()){
-                            int id = resultset.getInt("id");
+                    while(resultset.next()){
+                        int id = resultset.getInt("id");
                             
-                            list.add(getPunch(id));
-                        }
-                        
+                        list.add(getPunch(id));
                     }
-                    
-                    hasresults = pstSelect.getMoreResults();
                 }
             }
             conn.close();
         }
         
         catch (Exception e){
+            e.printStackTrace();
             return list;
         }
-    
+        System.out.println(list);
         return list;
     }
 }
