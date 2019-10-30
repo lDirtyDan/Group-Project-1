@@ -330,7 +330,7 @@ public class TASDatabase {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             conn = DriverManager.getConnection(server, username, password);
             if (conn.isValid(0)) {
-                /*Command sent to MySQL Database to search for specified id*/
+                /*Command sent to MySQL Database to search for specified badgeid and timestamp*/
                 query = "SELECT *, UNIX_TIMESTAMP(ORIGINALTIMESTAMP) * 1000 AS longtimestamp FROM punch WHERE badgeid = ? AND originaltimestamp BETWEEN ? AND ?";
                 pstUpdate = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
                 pstUpdate.setString(1, badgeid);
