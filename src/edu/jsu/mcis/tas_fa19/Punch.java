@@ -80,7 +80,7 @@ public class Punch {
     }
 
     public void setOriginalTimeStamp(long timeStamp) {
-        originalTimeStamp.setTimeInMillis(timeStamp*100);
+        originalTimeStamp.setTimeInMillis(timeStamp);
     }
 
     public void setId(int id) {
