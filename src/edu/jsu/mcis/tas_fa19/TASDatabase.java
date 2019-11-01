@@ -296,7 +296,6 @@ public class TASDatabase {
             System.err.println(e.toString());
         }
         
-        System.out.println(id);
         return id;
     
     }
