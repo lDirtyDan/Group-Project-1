@@ -167,6 +167,7 @@ public class Punch {
     
     //Feature 3
     public void adjust(Shift s){
+        //use varibles that is created in "shift.java"
         
         //create badgeID variable
         //create punch varible
@@ -179,9 +180,11 @@ public class Punch {
             //lunch start
             //lunch stop
             
-        //get punch from database
-        //get badgeID from punch
-        //get shiftID from that badgeid
+        //pull "punch" from database
+        //pull "badgeID" from punch class
+        //pull "shiftID" from badgeid
+        //multiple "if" startments to compare each shift type
+        //make adjustments based on time
     }
     
 }
