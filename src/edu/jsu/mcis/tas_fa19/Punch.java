@@ -86,7 +86,7 @@ public class Punch {
     public void setId(int id) {
         this.id = id;
     }
-
+    
     public void setAdjustmenttype(String adjustmenttype) {
         if(adjustmenttype != null){
             this.adjustmenttype = adjustmenttype;
@@ -94,10 +94,8 @@ public class Punch {
     }
     
     private LocalDateTime longToLocalDateTime(long longTime){
-        
         LocalDateTime timeStamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(longTime), TimeZone.getDefault().toZoneId());
         return timeStamp;
-    
     }
     
     public String getWeekDayShort(LocalDateTime originalTimeStamp){
@@ -167,5 +165,23 @@ public class Punch {
     }
     
     
+    //Feature 3
+    public void adjust(Shift s){
+        
+        //create badgeID variable
+        //create punch varible
+        
+        //varibles for shift
+            //start shift
+            //grace period
+            //docks (early & late)
+            //shift end
+            //lunch start
+            //lunch stop
+            
+        //get punch from database
+        //get badgeID from punch
+        //get shiftID from that badgeid
+    }
     
 }
