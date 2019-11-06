@@ -170,7 +170,6 @@ public class Punch {
         //use varibles that is created in "shift.java"
         
         //create badgeID variable
-        //create punch varible
         
         //varibles for shift
             //start shift
@@ -180,11 +179,49 @@ public class Punch {
             //lunch start
             //lunch stop
             
-        //pull "punch" from database
+            //int dock = starttime
+            
         //pull "badgeID" from punch class
         //pull "shiftID" from badgeid
         //multiple "if" startments to compare each shift type
         //make adjustments based on time
+        
+        /*
+        // start of shift
+        
+        if punch >= earlyshiftstart || punch < shiftstart {
+            punch = shiftstart;
+        }
+        
+        else if punch = shifttime {
+            punch = shiftstart;
+        }
+        
+        else if punch > shiftstart || punch <= graceperiod {
+            punch = starttime;
+        }
+        
+        else if punch > graceperiod || punch <= firstdockinterval {
+            punch = roll(dock, 15) (7:15); 
+        }
+        
+        else if punch > firstdockinterval || punch <= seconddockinterval - interval * .5  {
+            punch = roll(dock, 15) (7:15);
+        }
+        
+        else if punch > seconddockinterval - intercal * .5 && punch < seconddockinterval {
+            punch = roll(dock, 30) (7:30);
+        }
+        
+        //lunch start
+         
+        else if punch = lunchstart {
+            punch = lunchstart;
+        }
+        
+                
+        */
+           
     }
     
 }
