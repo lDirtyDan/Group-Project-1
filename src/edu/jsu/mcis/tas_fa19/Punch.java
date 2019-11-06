@@ -1,18 +1,21 @@
 package edu.jsu.mcis.tas_fa19;
 
+import java.util.ArrayList;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+import java.time.LocalTime;
+import java.util.Calendar;
 
 public class Punch {
     private Badge badge = null;
     private int terminalid;
     private int punchtypeid;
     private GregorianCalendar originalTimeStamp = new GregorianCalendar();
-    private LocalDateTime LDTTimeStamp = null;
+    private GregorianCalendar adjustedTimeStamp = new GregorianCalendar();
     private int id = 0;
     private String adjustmenttype = null;
     
@@ -158,7 +161,7 @@ public class Punch {
     public String printOriginalTimestamp() {
          long timeLong = originalTimeStamp.getTimeInMillis();
          timeLong = timeLong/100;
-         LDTTimeStamp = longToLocalDateTime(timeLong);
+         LocalDateTime LDTTimeStamp = longToLocalDateTime(timeLong);
          
         return "#" + badge.getId() + " " + adjustmenttype + ": " + getWeekDayShort(LDTTimeStamp).toUpperCase() +" "+ formatDate(LDTTimeStamp) + formatTime(LDTTimeStamp);
         
@@ -167,10 +170,49 @@ public class Punch {
     
     //Feature 3
     public void adjust(Shift s){
-        //use varibles that is created in "shift.java"
+        Shift adjShift = s; // sets shift to a local shift object
         
-        //create badgeID variable
-        //create punch varible
+        /*V brings shift objects to local objects for easier usage V*/
+        int interval = adjShift.getInterval();
+        int grace = adjShift.getGracePeriod();
+        int dock = adjShift.getDock();
+        ArrayList<LocalTime> timeClock = new ArrayList<LocalTime>();
+        LocalTime start = adjShift.getStart();
+        LocalTime stop = adjShift.getStop();
+        LocalTime lunchStart = adjShift.getLunchStart();
+        LocalTime lunchStop = adjShift.getLunchStop();
+        timeClock.add(start);
+        timeClock.add(stop);
+        timeClock.add(lunchStart);
+        timeClock.add(lunchStop);
+
+        ArrayList<GregorianCalendar> timeCheck = new ArrayList<GregorianCalendar>();
+        
+        
+        int hour = 0;
+        int minute = 0;
+        int second = 0;
+        
+        adjustedTimeStamp = originalTimeStamp;
+        
+        
+        
+        if(punchtypeid == 0){
+        
+        }
+        if(punchtypeid == 1){
+        
+        }
+        if(punchtypeid == 2){
+        
+        }
+        
+        adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, hour);
+        adjustedTimeStamp.set(Calendar.MINUTE, minute);
+        adjustedTimeStamp.set(Calendar.SECOND, second);
+        
+        
+        
         
         //varibles for shift
             //start shift
@@ -185,6 +227,13 @@ public class Punch {
         //pull "shiftID" from badgeid
         //multiple "if" startments to compare each shift type
         //make adjustments based on time
+    }
+    
+    public String printAdjustedTimestamp(){
+         
+        //return "#" + badge.getId() + " " + adjustmenttype + ": " + getWeekDayShort(LDTTimeStamp).toUpperCase() +" "+ formatDate(LDTTimeStamp) + formatTime(LDTTimeStamp);
+    
+        return null;
     }
     
 }
