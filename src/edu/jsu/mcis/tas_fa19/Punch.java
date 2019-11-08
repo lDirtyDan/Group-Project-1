@@ -229,40 +229,22 @@ public class Punch {
         //multiple "if" startments to compare each shift type
         //make adjustments based on time
         
+        //clock in is defined by 1
+        //clock out is defined by 0
+        //punchID is the variable for the punchtype
+        //punchTime holds the time that punch is made 
+        
         /*
-        // start of shift
         
-        if punch >= earlyshiftstart || punch < shiftstart {
-            punch = shiftstart;
+        //clocking in if statements
+        if punchID == 1 {
+            
+            if punchTime > earlystart
+        
+        
         }
-        
-        else if punch = shifttime {
-            punch = shiftstart;
-        }
-        
-        else if punch > shiftstart || punch <= graceperiod {
-            punch = starttime;
-        }
-        
-        else if punch > graceperiod || punch <= firstdockinterval {
-            punch = roll(dock, 15) (7:15); 
-        }
-        
-        else if punch > firstdockinterval || punch <= seconddockinterval - interval * .5  {
-            punch = roll(dock, 15) (7:15);
-        }
-        
-        else if punch > seconddockinterval - intercal * .5 && punch < seconddockinterval {
-            punch = roll(dock, 30) (7:30);
-        }
-        
-        //lunch start
-         
-        else if punch = lunchstart {
-            punch = lunchstart;
-        }
-        
-                
+       
+              
         */
            
     }
