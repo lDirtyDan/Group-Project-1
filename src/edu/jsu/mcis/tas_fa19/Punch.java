@@ -176,18 +176,36 @@ public class Punch {
         int interval = adjShift.getInterval();
         int grace = adjShift.getGracePeriod();
         int dock = adjShift.getDock();
+        int counter = 0;
+        ArrayList<GregorianCalendar> timeCheck = new ArrayList<GregorianCalendar>();
         ArrayList<LocalTime> timeClock = new ArrayList<LocalTime>();
         LocalTime start = adjShift.getStart();
         LocalTime stop = adjShift.getStop();
         LocalTime lunchStart = adjShift.getLunchStart();
         LocalTime lunchStop = adjShift.getLunchStop();
-        timeClock.add(start);
-        timeClock.add(stop);
-        timeClock.add(lunchStart);
-        timeClock.add(lunchStop);
-
-        ArrayList<GregorianCalendar> timeCheck = new ArrayList<GregorianCalendar>();
         
+        timeClock.add(start.minusMinutes(dock));        // ID = 0 before Clock-in
+        timeClock.add(start);                           // ID = 1 Clock-in
+        timeClock.add(start.plusMinutes(grace));        // ID = 2 Clock-in grace period
+        timeClock.add(start.plusMinutes(dock));         // ID = 3 Clock-in late
+        timeClock.add(lunchStart);                      // ID = 4 Lunch Starts
+        timeClock.add(lunchStop);                       // ID = 5 Lunch Stops
+        timeClock.add(stop.minusMinutes(dock));         // ID = 6 early Clock-out
+        timeClock.add(stop.minusMinutes(grace));        // ID = 7 Clock-out grace period
+        timeClock.add(stop);                            // ID = 8 Clock-out
+        timeClock.add(stop.plusMinutes(dock));          // ID = 9 Clock-out late
+        
+        while(counter != 11){
+            GregorianCalendar tempCal = new GregorianCalendar();
+            tempCal = originalTimeStamp;
+            
+            tempCal.set(Calendar.HOUR_OF_DAY, timeClock.get(counter).getHour());
+            tempCal.set(Calendar.MINUTE, timeClock.get(counter).getMinute());
+            tempCal.set(Calendar.SECOND, timeClock.get(counter).getSecond());
+            
+            timeCheck.add(tempCal);
+        
+        }
         
         int hour = 0;
         int minute = 0;
@@ -195,17 +213,6 @@ public class Punch {
         
         adjustedTimeStamp = originalTimeStamp;
         
-        
-        
-        if(punchtypeid == 0){
-        
-        }
-        if(punchtypeid == 1){
-        
-        }
-        if(punchtypeid == 2){
-        
-        }
         
         adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, hour);
         adjustedTimeStamp.set(Calendar.MINUTE, minute);
@@ -235,18 +242,50 @@ public class Punch {
         //punchTime holds the time that punch is made 
         
         /*
-        
         //clocking in if statements
         if punchID == 1 {
             
-            if punchTime > earlystart
+            if punchTime > earlystart && punchTime < start {
+                punchTime = start;
+            }
+            
+            else if punchTime = start {
+                punchTime = start;
+            }
         
+            else if punchTime > start && punchTime <= ingraceperiod {
+                punchTime = start;
+            }
+        
+            else if punchTime > lunchstart && punchTime <= lunchstop
+                punchTime = lunchstop;
+            }
         
         }
-       
-              
-        */
+        
+        //clocking out if statements
+        if punchID == 0 {
+            
+            if punchTime >= outgraceperiod && punchTime < stop {
+                punchTime = stop;
+            }
+        
+            else if punchTime == stop {
+                punchTime = stop;
+            }
+        
+            else if punchTime > stop && punchTime < latestop {
+                punchTime = stop;
+            }
+            
+            //lunch 
+            else if punchTime >= lunchstart && punchTime < lunchstop {
+                punchTime = lunchstart;
+            }
+        
+        }
            
+        */   
     }
     
     public String printAdjustedTimestamp(){
