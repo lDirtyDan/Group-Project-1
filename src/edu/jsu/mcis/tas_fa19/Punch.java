@@ -1,5 +1,6 @@
 package edu.jsu.mcis.tas_fa19;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -195,7 +196,7 @@ public class Punch {
         timeClock.add(stop);                            // ID = 8 Clock-out
         timeClock.add(stop.plusMinutes(dock));          // ID = 9 Clock-out late
         
-        while(counter != 11){
+        while(counter != 10){
             GregorianCalendar tempCal = new GregorianCalendar();
             tempCal = originalTimeStamp;
             
@@ -204,8 +205,11 @@ public class Punch {
             tempCal.set(Calendar.SECOND, timeClock.get(counter).getSecond());
             
             timeCheck.add(tempCal);
-        
+            String timeStamp = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(timeCheck.get(counter).getTime());
+            // System.out.println( "Punch ID: "+ adjShift.getId() + " Time: " + timeStamp); // Uncomment this to output PunchID and Timestamp
+            counter++;
         }
+        
         
         int hour = 0;
         int minute = 0;
@@ -213,6 +217,7 @@ public class Punch {
         
         adjustedTimeStamp = originalTimeStamp;
         
+        if(originalTimeStamp.compareTo(adjustedTimeStamp) > 0){}
         
         adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, hour);
         adjustedTimeStamp.set(Calendar.MINUTE, minute);
