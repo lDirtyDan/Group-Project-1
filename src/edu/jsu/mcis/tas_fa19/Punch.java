@@ -217,15 +217,72 @@ public class Punch {
         
         adjustedTimeStamp = originalTimeStamp;
         
-        if(originalTimeStamp.compareTo(adjustedTimeStamp) > 0){}
-        
-        adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, hour);
-        adjustedTimeStamp.set(Calendar.MINUTE, minute);
-        adjustedTimeStamp.set(Calendar.SECOND, second);
+        adjustedTimeStamp.set(Calendar.SECOND, 0);
         
         
         
         
+       
+        /*V If statement nest to determine where a stamp should be adjusted and how. V*/
+        if(punchtypeid == 1){
+            if(0>=adjustedTimeStamp.compareTo(timeCheck.get(0)) && adjustedTimeStamp.compareTo(timeCheck.get(1))>1)         // before clock-in
+            {
+                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, Integer.parseInt((new SimpleDateFormat("HH")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.MINUTE, Integer.parseInt((new SimpleDateFormat("mm")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.SECOND, Integer.parseInt((new SimpleDateFormat("ss")).format(timeCheck.get(1).getTime())));
+            }
+            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(1)) && adjustedTimeStamp.compareTo(timeCheck.get(2))>1)    // after clock-in, but w/ grace period
+            {
+                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, Integer.parseInt((new SimpleDateFormat("HH")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.MINUTE, Integer.parseInt((new SimpleDateFormat("mm")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.SECOND, Integer.parseInt((new SimpleDateFormat("ss")).format(timeCheck.get(1).getTime())));
+            }
+            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(2)) && adjustedTimeStamp.compareTo(timeCheck.get(3))>1)    // after clock-in w/o grace period
+            {
+                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, Integer.parseInt((new SimpleDateFormat("HH")).format(timeCheck.get(1).getTime()))+dock);
+                adjustedTimeStamp.set(Calendar.MINUTE, Integer.parseInt((new SimpleDateFormat("mm")).format(timeCheck.get(1).getTime()))+dock);
+                adjustedTimeStamp.set(Calendar.SECOND, Integer.parseInt((new SimpleDateFormat("ss")).format(timeCheck.get(1).getTime()))+dock);
+            }
+        }
+        else if(punchtypeid == 0){
+            if(0>=adjustedTimeStamp.compareTo(timeCheck.get(3)) && adjustedTimeStamp.compareTo(timeCheck.get(4))>1)    // after late clock-in penalty, but before lunch
+            {
+                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, Integer.parseInt((new SimpleDateFormat("HH")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.MINUTE, Integer.parseInt((new SimpleDateFormat("mm")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.SECOND, Integer.parseInt((new SimpleDateFormat("ss")).format(timeCheck.get(1).getTime())));
+            }
+        
+            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(4)) && adjustedTimeStamp.compareTo(timeCheck.get(5))>1)    // Lunch Check
+            {
+                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, Integer.parseInt((new SimpleDateFormat("HH")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.MINUTE, Integer.parseInt((new SimpleDateFormat("mm")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.SECOND, Integer.parseInt((new SimpleDateFormat("ss")).format(timeCheck.get(1).getTime())));
+            }
+            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(5)) && adjustedTimeStamp.compareTo(timeCheck.get(6))>1)    // after Lunch early Clock-out penatly
+            {
+                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, Integer.parseInt((new SimpleDateFormat("HH")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.MINUTE, Integer.parseInt((new SimpleDateFormat("mm")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.SECOND, Integer.parseInt((new SimpleDateFormat("ss")).format(timeCheck.get(1).getTime())));
+            }
+            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(6)) && adjustedTimeStamp.compareTo(timeCheck.get(7))>1)    // Clock-out w/ grace period
+            {
+                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, Integer.parseInt((new SimpleDateFormat("HH")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.MINUTE, Integer.parseInt((new SimpleDateFormat("mm")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.SECOND, Integer.parseInt((new SimpleDateFormat("ss")).format(timeCheck.get(1).getTime())));
+            }
+            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(7)) && adjustedTimeStamp.compareTo(timeCheck.get(8))>1)    // clock out
+            {
+                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, Integer.parseInt((new SimpleDateFormat("HH")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.MINUTE, Integer.parseInt((new SimpleDateFormat("mm")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.SECOND, Integer.parseInt((new SimpleDateFormat("ss")).format(timeCheck.get(1).getTime())));
+            }
+            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(8)) && adjustedTimeStamp.compareTo(timeCheck.get(9))>1)    // clock-out late
+            {
+                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, Integer.parseInt((new SimpleDateFormat("HH")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.MINUTE, Integer.parseInt((new SimpleDateFormat("mm")).format(timeCheck.get(1).getTime())));
+                adjustedTimeStamp.set(Calendar.SECOND, Integer.parseInt((new SimpleDateFormat("ss")).format(timeCheck.get(1).getTime())));
+            }
+        }
         //varibles for shift
             //start shift
             //grace period
