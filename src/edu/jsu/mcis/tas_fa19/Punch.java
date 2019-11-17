@@ -2,12 +2,7 @@ package edu.jsu.mcis.tas_fa19;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.TextStyle;
-import java.util.Locale;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -61,8 +56,6 @@ public class Punch {
     public int getId() {
         return id;
     }
-
-    
     
     public String getAdjustmenttype() {
         return adjustmenttype;
@@ -94,18 +87,6 @@ public class Punch {
         if(adjustmenttype != null){
             this.adjustmenttype = adjustmenttype;
         }
-    }
-    
-    private LocalDateTime longToLocalDateTime(long longTime){
-        LocalDateTime timeStamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(longTime), TimeZone.getDefault().toZoneId());
-        return timeStamp;
-    }
-    
-    public String getWeekDayShort(LocalDateTime originalTimeStamp){
-        String weekDay = null;
-        weekDay = originalTimeStamp.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US).toUpperCase();
-        
-        return weekDay;
     }
     
     public String printOriginalTimestamp() {
@@ -158,9 +139,14 @@ public class Punch {
             GregorianCalendar tempCal = new GregorianCalendar();
             tempCal.setTimeInMillis(baseComp.get("start"));
             
-            if(counter == 0){tempCal.add(Calendar.MINUTE, -dock);}
-            else if(counter == 1){tempCal.add(Calendar.MINUTE, grace);}
-            else if(counter == 2){tempCal.add(Calendar.MINUTE, interval);}
+            switch(counter){
+                case 0: tempCal.add(Calendar.MINUTE, -dock);
+                        break;
+                case 1: tempCal.add(Calendar.MINUTE, grace);
+                        break;
+                case 2: tempCal.add(Calendar.MINUTE, interval);
+                        break;
+            }
             
             baseComp.put(timeExt[counter], tempCal.getTimeInMillis());
         }
@@ -169,9 +155,14 @@ public class Punch {
             tempCal.setTimeInMillis(baseComp.get("stop"));
             int counterMod = counter + 3;
             
-            if(counter == 0){tempCal.add(Calendar.MINUTE, -dock);}
-            else if(counter == 1){tempCal.add(Calendar.MINUTE, -grace);}
-            else if(counter == 2){tempCal.add(Calendar.MINUTE, interval);}
+            switch(counter){
+                case 0: tempCal.add(Calendar.MINUTE, -dock);
+                        break;
+                case 1: tempCal.add(Calendar.MINUTE, -grace);
+                        break;
+                case 2: tempCal.add(Calendar.MINUTE, interval);
+                        break;
+            }
             
             baseComp.put(timeExt[counterMod], tempCal.getTimeInMillis());
         }
@@ -185,7 +176,6 @@ public class Punch {
         originalTimeStamp.setTimeInMillis(originaltimestamp);
         GregorianCalendar adjustedTimeStamp = new GregorianCalendar();
         adjustedTimeStamp.setTimeInMillis(originaltimestamp);
-        
         
         int originalMinute = originalTimeStamp.get(Calendar.MINUTE);
         //interval value is stored in "shiftinterval"
@@ -211,16 +201,9 @@ public class Punch {
          // sets shift to a local shift object
         Shift adjShift = s;
          
-        int interval = adjShift.getInterval();
-        int grace = adjShift.getGracePeriod();
-        int dock = adjShift.getDock();
-         
-         
         /*V organization of objects for easier use V*/
         GregorianCalendar originalTimeStamp = new GregorianCalendar();
         originalTimeStamp.setTimeInMillis(originaltimestamp);
-        GregorianCalendar adjustedTimeStamp = new GregorianCalendar();
-        adjustedTimeStamp.setTimeInMillis(originaltimestamp);
         SimpleDateFormat weekDay = new SimpleDateFormat("EEE");
         String day = weekDay.format(originalTimeStamp.getTime()).toUpperCase();
         
@@ -267,8 +250,6 @@ public class Punch {
                 else if(originaltimestamp >= timeCheck.get("startGrace") && timeCheck.get("startLate") >= originaltimestamp){adjustedtimestamp = timeCheck.get("startLate"); adjustmenttype = adjType[2];}
                 else if(originaltimestamp >= timeCheck.get("lunchStart") && timeCheck.get("lunchStop") >= originaltimestamp){adjustedtimestamp = timeCheck.get("lunchStop"); adjustmenttype = adjType[4];}
                 else {intervalAdjust(adjShift,adjType);}
-            
-            
             }
         
             else if(punchtypeid == CLOCK_OUT){
