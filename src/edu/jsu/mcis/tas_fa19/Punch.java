@@ -219,30 +219,6 @@ public class Punch {
         
         timeCheck = createLongHashMap(timeType,timeClock,adjShift); // Creates HashMap with keys corresponding to specific timestamps in milliseconds (long)
         
-        /*
-            Keys            -   Values
-            
-            startEarly      -   start minus the interval   
-            start           -   defined as the clock in time for a shift
-            startGrace      -   start plus the grace period
-            startLate       -   start plus the dock integer
-            lunchStart      -   defined as the lunch clock out for a shift
-            lunchStop       -   defined as the lunch clock in for a shift
-            stopEarly       -   stop minus the dock integer
-            stopGrace       -   stop minus the grace period
-            stop            -   defined as the clock out time for a shift
-            stopLate        -   stop plus the interval
-        
-            you can retrieve a long from this specific hashmap by using the following function:
-            
-            timeCheck.get("[Key name here]");
-        
-            Ex.
-        
-            timeCheck.get("start");
-        
-        */
-        
         /*V If statement nest to determine where a stamp should be adjusted and how. V*/
         if(!day.equals("SAT") && !day.equals("SUN")){
             if(punchtypeid == CLOCK_IN){
