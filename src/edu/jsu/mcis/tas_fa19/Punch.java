@@ -24,7 +24,6 @@ public class Punch {
     private long adjustedtimestamp;
     private int id = 0;
     private String adjustmenttype = null;
-    private String adjType;
     
     
     public Punch(Badge badge, int terminalid, int punchtypeid){
@@ -132,19 +131,20 @@ public class Punch {
         s.append(" ");
         s.append(punchDescriptions[punchtypeid]);
         s.append(": ");
-        s.append(sdf.format(gc.getTime()));
+        s.append(sdf.format(gc.getTime()).toUpperCase());
+        s.append(" ");
+        s.append(adjustmenttype);
          
-        return s.toString().toUpperCase();
+        return s.toString();
     }
     
     public HashMap<String,Long> createLongHashMap(String[] timeType,ArrayList<LocalTime> timeClock, Shift adjShift){
         int interval = adjShift.getInterval();
         int grace = adjShift.getGracePeriod();
         int dock = adjShift.getDock();
-        int counter = 0;
-        String[] timeExt = new String[]{"startEarly","startGrace","StartLate","stopEarly","stopGrace","stopLate"};
+        String[] timeExt = new String[]{"startEarly","startGrace","startLate","stopEarly","stopGrace","stopLate"};
         HashMap<String,Long> baseComp = new HashMap<String,Long>();
-        while(counter != 4){
+        for(int counter = 0; counter < 4; counter++){
             GregorianCalendar tempCal = new GregorianCalendar();
             tempCal.setTimeInMillis(originaltimestamp);
             
@@ -153,166 +153,136 @@ public class Punch {
             tempCal.set(Calendar.SECOND, 0);
             
             baseComp.put(timeType[counter], tempCal.getTimeInMillis());
-            counter++;
         }
-        while(counter != 3){
+        for(int counter = 0; counter < 3; counter++){
             GregorianCalendar tempCal = new GregorianCalendar();
             tempCal.setTimeInMillis(baseComp.get("start"));
             
-            if(counter == 0){tempCal.roll(Calendar.MINUTE, -dock);}
-            if(counter == 1){tempCal.roll(Calendar.MINUTE, grace);}
-            if(counter == 2){tempCal.roll(Calendar.MINUTE, interval);}
+            if(counter == 0){tempCal.add(Calendar.MINUTE, -dock);}
+            else if(counter == 1){tempCal.add(Calendar.MINUTE, grace);}
+            else if(counter == 2){tempCal.add(Calendar.MINUTE, interval);}
             
-            baseComp.put(timeType[counter], tempCal.getTimeInMillis());
-            counter++;
+            baseComp.put(timeExt[counter], tempCal.getTimeInMillis());
         }
-        counter = 0;
-        while(counter != 3){
+        for(int counter = 0; counter < 3; counter++){
             GregorianCalendar tempCal = new GregorianCalendar();
             tempCal.setTimeInMillis(baseComp.get("stop"));
             int counterMod = counter + 3;
             
-            if(counter == 0){tempCal.roll(Calendar.MINUTE, -dock);}
-            if(counter == 1){tempCal.roll(Calendar.MINUTE, -grace);}
-            if(counter == 2){tempCal.roll(Calendar.MINUTE, interval);}
+            if(counter == 0){tempCal.add(Calendar.MINUTE, -dock);}
+            else if(counter == 1){tempCal.add(Calendar.MINUTE, -grace);}
+            else if(counter == 2){tempCal.add(Calendar.MINUTE, interval);}
             
-            
-            
-            baseComp.put(timeType[counterMod], tempCal.getTimeInMillis());
-            counter++;
+            baseComp.put(timeExt[counterMod], tempCal.getTimeInMillis());
         }
         
-        
-        
-        
         return baseComp;
+    }
+    
+    public void intervalAdjust(Shift adjShift,String[] adjType){
+        int interval = adjShift.getInterval();
+        GregorianCalendar originalTimeStamp = new GregorianCalendar();
+        originalTimeStamp.setTimeInMillis(originaltimestamp);
+        GregorianCalendar adjustedTimeStamp = new GregorianCalendar();
+        adjustedTimeStamp.setTimeInMillis(originaltimestamp);
+        
+        
+        int originalMinute = originalTimeStamp.get(Calendar.MINUTE);
+        //interval value is stored in "shiftinterval"
+        int adjustedMinute = 0;
+        if(originalMinute % interval !=0){
+            if((originalMinute % interval) < (interval/2)){
+                adjustedMinute = (Math.round(originalMinute/interval)*interval);
+                adjustmenttype = adjType[5];
+            }
+            else{
+                adjustedMinute = (Math.round(originalMinute/interval)*interval) + interval;
+                adjustmenttype = adjType[5];
+            }
+            adjustedTimeStamp.add(Calendar.MINUTE, (adjustedMinute - originalMinute));
+        }
+        else{adjustmenttype = adjType[6];}
+        adjustedTimeStamp.set(Calendar.SECOND, 0);
+        adjustedtimestamp = adjustedTimeStamp.getTimeInMillis();
     }
     
     //Feature 3
     public void adjust(Shift s){
          // sets shift to a local shift object
-        
-        /*V brings shift objects to local objects for easier usage V*/
+        Shift adjShift = s;
+         
+        int interval = adjShift.getInterval();
+        int grace = adjShift.getGracePeriod();
+        int dock = adjShift.getDock();
+         
+         
+        /*V organization of objects for easier use V*/
         GregorianCalendar originalTimeStamp = new GregorianCalendar();
         originalTimeStamp.setTimeInMillis(originaltimestamp);
         GregorianCalendar adjustedTimeStamp = new GregorianCalendar();
         adjustedTimeStamp.setTimeInMillis(originaltimestamp);
+        SimpleDateFormat weekDay = new SimpleDateFormat("EEE");
+        String day = weekDay.format(originalTimeStamp.getTime()).toUpperCase();
+        
         HashMap<String,Long> timeCheck = new HashMap<String,Long>();
         ArrayList<LocalTime> timeClock = new ArrayList<LocalTime>();
-        String[] timeType = new String[]{"start","lunchStop","lunchStart","stop"};
-        LocalTime start = adjShift.getStart();
-        LocalTime stop = adjShift.getStop();
-        LocalTime lunchStart = adjShift.getLunchStart();
-        LocalTime lunchStop = adjShift.getLunchStop();
+        String[] timeType = new String[]{"start","lunchStart","lunchStop","stop"};
+        String[] adjType = new String[]{"(Shift Start)","(Shift Stop)","(Shift Dock)","(Lunch Start)","(Lunch Stop)","(Interval Round)","(None)"};
         
-        timeClock.add(start);                           // ID = 0 Clock-in
-        timeClock.add(lunchStart);                      // ID = 1 Lunch Starts
-        timeClock.add(lunchStop);                       // ID = 2 Lunch Stops
-        timeClock.add(stop);                            // ID = 3 Clock-out
+        timeClock.add(adjShift.getStart());                           
+        timeClock.add(adjShift.getLunchStart());                     
+        timeClock.add(adjShift.getLunchStop());                       
+        timeClock.add(adjShift.getStop());                            
         
+        timeCheck = createLongHashMap(timeType,timeClock,adjShift); // Creates HashMap with keys corresponding to specific timestamps in milliseconds (long)
         
+        /*
+            Keys            -   Values
+            
+            startEarly      -   start minus the interval   
+            start           -   defined as the clock in time for a shift
+            startGrace      -   start plus the grace period
+            startLate       -   start plus the dock integer
+            lunchStart      -   defined as the lunch clock out for a shift
+            lunchStop       -   defined as the lunch clock in for a shift
+            stopEarly       -   stop minus the dock integer
+            stopGrace       -   stop minus the grace period
+            stop            -   defined as the clock out time for a shift
+            stopLate        -   stop plus the interval
         
-        timeCheck = createLongHashMap(timeType,timeClock,s);
+            you can retrieve a long from this specific hashmap by using the following function:
+            
+            timeCheck.get("[Key name here]");
         
-        adjustedTimeStamp.set(Calendar.SECOND, 0);
+            Ex.
         
+            timeCheck.get("start");
+        
+        */
+        
+        System.out.println(adjShift.getDescription() +" "+ timeCheck);
         
         /*V If statement nest to determine where a stamp should be adjusted and how. V*/
-        if(punchtypeid == 1){
-            if(0>=adjustedTimeStamp.compareTo(timeCheck.get(0)) && adjustedTimeStamp.compareTo(timeCheck.get(1))>=0)         // before clock-in
-            {
-                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, timeCheck.get(1).get(Calendar.HOUR));
-                adjustedTimeStamp.set(Calendar.MINUTE, timeCheck.get(1).get(Calendar.MINUTE));
-                adjustedTimeStamp.set(Calendar.SECOND, timeCheck.get(1).get(Calendar.SECOND));
-                System.out.println("yes");
-            }
-            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(1)) && adjustedTimeStamp.compareTo(timeCheck.get(2))>=0)    // after clock-in, but w/ grace period
-            {
-                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, timeCheck.get(1).get(Calendar.HOUR));
-                adjustedTimeStamp.set(Calendar.MINUTE, timeCheck.get(1).get(Calendar.MINUTE));
-                adjustedTimeStamp.set(Calendar.SECOND, timeCheck.get(1).get(Calendar.SECOND));
-            }
-            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(2)) && adjustedTimeStamp.compareTo(timeCheck.get(3))>=0)    // after clock-in w/o grace period
-            {
-                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, timeCheck.get(3).get(Calendar.HOUR));
-                adjustedTimeStamp.set(Calendar.MINUTE, timeCheck.get(3).get(Calendar.MINUTE));
-                adjustedTimeStamp.set(Calendar.SECOND, timeCheck.get(3).get(Calendar.SECOND));
-            }
-            
-            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(4)) && adjustedTimeStamp.compareTo(timeCheck.get(5))>=0)    // Lunch Check clock in
-            {
-                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, timeCheck.get(5).get(Calendar.HOUR));
-                adjustedTimeStamp.set(Calendar.MINUTE, timeCheck.get(5).get(Calendar.MINUTE));
-                adjustedTimeStamp.set(Calendar.SECOND, timeCheck.get(5).get(Calendar.SECOND));
-            }
+        if(!day.equals("SAT") && !day.equals("SUN")){
+            if(punchtypeid == CLOCK_IN){
+                if(originaltimestamp >= timeCheck.get("startEarly") && timeCheck.get("startGrace") >= originaltimestamp){adjustedtimestamp = timeCheck.get("start"); adjustmenttype = adjType[0];}
+                else if(originaltimestamp >= timeCheck.get("startGrace") && timeCheck.get("startLate") >= originaltimestamp){adjustedtimestamp = timeCheck.get("startLate"); adjustmenttype = adjType[2];}
+                else if(originaltimestamp >= timeCheck.get("lunchStart") && timeCheck.get("lunchStop") >= originaltimestamp){adjustedtimestamp = timeCheck.get("lunchStop"); adjustmenttype = adjType[4];}
+                else {intervalAdjust(adjShift,adjType);}
             
             
-            else   // auto interval adjustment
-            {
-                int originalMinute = originalTimeStamp.get(Calendar.MINUTE);
-                //interval value is stored in "shiftinterval"
-                int adjustedMinute = 0;
-                if(originalMinute % interval !=0){
-                    if((originalMinute % interval) < (interval/2)){
-                        adjustedMinute = (Math.round(originalMinute/interval)*interval);
-                    }
-                    else{
-                        adjustedMinute = (Math.round(originalMinute/interval)*interval) + interval;
-                    }
-                    adjustedTimeStamp.add(Calendar.MINUTE, (adjustedMinute - originalMinute));
-                    adjustedTimeStamp.set(Calendar.SECOND, 0);
-                }
             }
-            
-            
-        }
         
-        else if(punchtypeid == 0){
+            else if(punchtypeid == CLOCK_OUT){
             
-            if(0>=adjustedTimeStamp.compareTo(timeCheck.get(4)) && adjustedTimeStamp.compareTo(timeCheck.get(5))>=0)    // Lunch Check clock out
-            {
-                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, timeCheck.get(4).get(Calendar.HOUR));
-                adjustedTimeStamp.set(Calendar.MINUTE, timeCheck.get(4).get(Calendar.MINUTE));
-                adjustedTimeStamp.set(Calendar.SECOND, timeCheck.get(4).get(Calendar.SECOND));
-            }
-    
-            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(6)) && adjustedTimeStamp.compareTo(timeCheck.get(7))>=0)    // Clock-out w/o grace period
-            {
-                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, timeCheck.get(6).get(Calendar.HOUR));
-                adjustedTimeStamp.set(Calendar.MINUTE, timeCheck.get(6).get(Calendar.MINUTE));
-                adjustedTimeStamp.set(Calendar.SECOND, timeCheck.get(6).get(Calendar.SECOND));
-            }
-            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(7)) && adjustedTimeStamp.compareTo(timeCheck.get(8))>=0)    // clock out w/ grace period
-            {
-                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, timeCheck.get(8).get(Calendar.HOUR));
-                adjustedTimeStamp.set(Calendar.MINUTE, timeCheck.get(8).get(Calendar.MINUTE));
-                adjustedTimeStamp.set(Calendar.SECOND, timeCheck.get(8).get(Calendar.SECOND));
-            }
-            else if(0>=adjustedTimeStamp.compareTo(timeCheck.get(8)) && adjustedTimeStamp.compareTo(timeCheck.get(9))>=0)    // clock-out late
-            {
-                adjustedTimeStamp.set(Calendar.HOUR_OF_DAY, timeCheck.get(8).get(Calendar.HOUR));
-                adjustedTimeStamp.set(Calendar.MINUTE, timeCheck.get(8).get(Calendar.MINUTE));
-                adjustedTimeStamp.set(Calendar.SECOND, timeCheck.get(8).get(Calendar.SECOND));
-            }
-            
-            else   // interval check
-            {
-                int originalMinute = originalTimeStamp.get(Calendar.MINUTE);
-                //interval value is stored in "shiftinterval"
-                int adjustedMinute = 0;
-                if(originalMinute % interval !=0){
-                    if((originalMinute % interval) < (interval/2)){
-                        adjustedMinute = (Math.round(originalMinute/interval)*interval);
-                    }
-                    else{
-                        adjustedMinute = (Math.round(originalMinute/interval)*interval) + interval;
-                    }
-                    adjustedTimeStamp.add(Calendar.MINUTE, (adjustedMinute - originalMinute));
-                    adjustedTimeStamp.set(Calendar.SECOND, 0);
-                }
+                if(originaltimestamp >= timeCheck.get("lunchStart") && timeCheck.get("lunchStop") >= originaltimestamp){adjustedtimestamp = timeCheck.get("lunchStart"); adjustmenttype = adjType[3];}
+                else if(originaltimestamp >= timeCheck.get("stopEarly") && timeCheck.get("stopGrace") >= originaltimestamp){adjustedtimestamp = timeCheck.get("stopEarly"); adjustmenttype = adjType[2];}
+                else if(originaltimestamp >= timeCheck.get("stopGrace") && timeCheck.get("stopLate") >= originaltimestamp){adjustedtimestamp = timeCheck.get("stop"); adjustmenttype = adjType[1];}
+                else {intervalAdjust(adjShift,adjType);}
             }
         }
-        adjustedtimestamp = adjustedTimeStamp.getTimeInMillis();
+        else{intervalAdjust(adjShift,adjType);}
+        timeCheck.clear();
     }
 }
 
