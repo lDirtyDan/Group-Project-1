@@ -260,8 +260,6 @@ public class Punch {
         
         */
         
-        System.out.println(adjShift.getDescription() +" "+ timeCheck);
-        
         /*V If statement nest to determine where a stamp should be adjusted and how. V*/
         if(!day.equals("SAT") && !day.equals("SUN")){
             if(punchtypeid == CLOCK_IN){
