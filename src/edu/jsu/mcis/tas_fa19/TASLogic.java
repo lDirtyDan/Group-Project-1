@@ -13,7 +13,10 @@ public class TASLogic {
             int counter = 0;
             int punchType = dailypunchlist.get(counter).getPunchtypeid();
             while(punchType != 3){
-            
+                if(!inPair && punchType == 1){
+                }
+                if(inPair && punchType == 0){
+                }
             }
             counter++;
         }
