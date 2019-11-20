@@ -25,8 +25,12 @@ public class TASLogic {
          ArrayList<HashMap<String, String>> jsonData = new ArrayList();
          for (Punch punch : dailypunchlist){
          HashMap<String, String> punchData = new HashMap<>();
-         punchData.put("id", String.valueOf(punch.getId()));
-         punchData.put("badgeid", String.valueOf(punch.getBadgeid()));
+         punchData.put("ID", String.valueOf(punch.getId()));
+         punchData.put("Badgeid", String.valueOf(punch.getBadgeid()));
+         punchData.put("Badgetypieid", String.valueOf(punch.getPunchtypeid()));
+         punchData.put("TerminalID", String.valueOf(punch.getTerminalid()));
+         punchData.put("Punchtypieid", String.valueOf(punch.getPunchtypeid()));
+         punchData.put("Punchdata", String.valueOf(punch.getPunchDescriptions()));
          }                  
          return json;
      }

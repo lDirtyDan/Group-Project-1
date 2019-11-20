@@ -102,6 +102,18 @@ public class Punch {
          
         return s.toString().toUpperCase();
     }
+
+    public String[] getPunchDescriptions(){
+        return punchDescriptions;
+    }
+    
+    public long getAdjustedtimestamp() {
+        return adjustedtimestamp;
+    }
+
+    public void setAdjustedtimestamp(long adjustedtimestamp) {
+        this.adjustedtimestamp = adjustedtimestamp;
+    }
     
     public String printAdjustedTimestamp(){
         StringBuilder s = new StringBuilder();
