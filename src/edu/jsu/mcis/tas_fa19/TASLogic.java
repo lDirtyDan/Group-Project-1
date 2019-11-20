@@ -6,15 +6,22 @@ import java.util.HashMap;
 
 public class TASLogic {
     public static int calculateTotalMinutes(ArrayList<Punch> dailypunchlist, Shift shift){
-        punchManagment(dailypunchlist);
+        int totalMinutes = 0;
+        boolean inPair = false;
         
-        return 0; //replace later
-    }
-    
-    public static void punchManagment(ArrayList<Punch> dailypunchlist){
-        for(int list=0; list>0; list++){
-        
+        for(Punch punch : dailypunchlist){
+            int counter = 0;
+            int punchType = dailypunchlist.get(counter).getPunchtypeid();
+            while(punchType != 3){
+                if(!inPair && punchType == 1){
+                }
+                if(inPair && punchType == 0){
+                }
+            }
+            counter++;
         }
+        
+        return totalMinutes;
     }
     public static String getPunchListAsJSON(ArrayList<Punch> dailypunchlist){
          
