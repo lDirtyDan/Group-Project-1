@@ -176,7 +176,7 @@ public class TASDatabase {
         try {
             if (conn.isValid(0)) {
                 /*Command sent to MySQL Database to search for specified id*/
-                query = "SELECT *, UNIX_TIMESTAMP(ORIGINALTIMESTAMP) * 1000 AS longtimestamp FROM punch WHERE id = ?";
+                query = "SELECT *, UNIX_TIMESTAMP(ORIGINALTIMESTAMP) * 1000 AS longtimestamp FROM punch WHERE id = ? ORDER BY originaltimestamp";
                 pstSelect = conn.prepareStatement(query);
                 pstSelect.setInt(1, id);
                 hasresults = pstSelect.execute();
@@ -321,7 +321,7 @@ public class TASDatabase {
         try {
             if (conn.isValid(0)) {
                 /*Command sent to MySQL Database to search for specified badgeid and timestamp*/
-                query = "SELECT *, UNIX_TIMESTAMP(ORIGINALTIMESTAMP) * 1000 AS longtimestamp FROM punch WHERE badgeid = ? AND originaltimestamp BETWEEN ? AND ?";
+                query = "SELECT *, UNIX_TIMESTAMP(ORIGINALTIMESTAMP) * 1000 AS longtimestamp FROM punch WHERE badgeid = ? AND originaltimestamp BETWEEN ? AND ? ORDER BY originaltimestamp";
                 pstSelect = conn.prepareStatement(query);
                 pstSelect.setString(1, badgeID);
                 pstSelect.setString(2,startTime);
