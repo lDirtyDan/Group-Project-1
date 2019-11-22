@@ -7,15 +7,36 @@ import java.util.HashMap;
 public class TASLogic {
     public static int calculateTotalMinutes(ArrayList<Punch> dailypunchlist, Shift shift){
         int totalMinutes = 0;
+        int lunchDeduct = shift.getLunchDeduct();
         boolean inPair = false;
+        boolean lunchCheck = false;
+        long startTime = 0;
+        long stopTime = 0;
+        String adjType = null;
         
         for(Punch punch : dailypunchlist){
             int counter = 0;
             int punchType = dailypunchlist.get(counter).getPunchtypeid();
-            while(punchType != 3){
+            if(punchType != 3){
+                punch.adjust(shift);
+                adjType = punch.getAdjustmenttype();
+                if(adjType.equals("(Lunch Start)") || adjType.equals("(Lunch Stop)")){
+                    lunchCheck = true;
+                    System.out.println(totalMinutes);
+                }
+                
                 if(!inPair && punchType == 1){
+                    startTime = punch.getAdjustedtimestamp();
+                    inPair = true;
                 }
                 if(inPair && punchType == 0){
+                    stopTime = punch.getAdjustedtimestamp();
+                    totalMinutes = totalMinutes + (int)((stopTime - startTime)*3600);
+                    inPair = false;
+                }
+                
+                if(lunchCheck && totalMinutes > 420){
+                    totalMinutes = totalMinutes - lunchDeduct;
                 }
             }
             counter++;
