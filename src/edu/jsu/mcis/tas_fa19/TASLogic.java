@@ -23,22 +23,26 @@ public class TASLogic {
         
         return totalMinutes;
     }
+    
     public static String getPunchListAsJSON(ArrayList<Punch> dailypunchlist){
+        
+        ArrayList<HashMap<String, String>> jsonData = new ArrayList();
+        
+        String json = JSONValue.toJSONString(jsonData);
          
+        for (Punch punch : dailypunchlist){
+            
+            HashMap<String, String> punchData = new HashMap<>();
+            punchData.put("ID", String.valueOf(punch.getId()));
+            punchData.put("Badgeid", String.valueOf(punch.getBadgeid()));
+            punchData.put("Badgetypieid", String.valueOf(punch.getPunchtypeid()));
+            punchData.put("TerminalID", String.valueOf(punch.getTerminalid()));
+            punchData.put("Punchtypieid", String.valueOf(punch.getPunchtypeid()));
+            punchData.put("Punchdata", String.valueOf(punch.getPunchDescriptions()));
          
-         // Feature 5
-         String json = " ";
+            jsonData.add(punchData);
+        }
          
-         ArrayList<HashMap<String, String>> jsonData = new ArrayList();
-         for (Punch punch : dailypunchlist){
-         HashMap<String, String> punchData = new HashMap<>();
-         punchData.put("ID", String.valueOf(punch.getId()));
-         punchData.put("Badgeid", String.valueOf(punch.getBadgeid()));
-         punchData.put("Badgetypieid", String.valueOf(punch.getPunchtypeid()));
-         punchData.put("TerminalID", String.valueOf(punch.getTerminalid()));
-         punchData.put("Punchtypieid", String.valueOf(punch.getPunchtypeid()));
-         punchData.put("Punchdata", String.valueOf(punch.getPunchDescriptions()));
-         }                  
-         return json;
-     }
+        return json;
+    }
 }
