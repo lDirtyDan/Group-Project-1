@@ -31,14 +31,18 @@ public class TASLogic {
          
          ArrayList<HashMap<String, String>> jsonData = new ArrayList();
          for (Punch punch : dailypunchlist){
-         HashMap<String, String> punchData = new HashMap<>();
-         punchData.put("ID", String.valueOf(punch.getId()));
-         punchData.put("Badgeid", String.valueOf(punch.getBadgeid()));
-         punchData.put("Badgetypieid", String.valueOf(punch.getPunchtypeid()));
-         punchData.put("TerminalID", String.valueOf(punch.getTerminalid()));
-         punchData.put("Punchtypieid", String.valueOf(punch.getPunchtypeid()));
-         punchData.put("Punchdata", String.valueOf(punch.getPunchDescriptions()));
+            HashMap<String, String> punchData = new HashMap<>();
+            punchData.put("ID", String.valueOf(punch.getId()));
+            punchData.put("Badgeid", String.valueOf(punch.getBadgeid()));
+            punchData.put("Badgetypieid", String.valueOf(punch.getPunchtypeid()));
+            punchData.put("TerminalID", String.valueOf(punch.getTerminalid()));
+            punchData.put("Punchtypieid", String.valueOf(punch.getPunchtypeid()));
+            punchData.put("Punchdata", String.valueOf(punch.getPunchDescriptions()));
+            punchData.put("originaltimestamp", String.valueOf(punch.getOriginaltimestamp()));
+            punchData.put("adjustedtimestamp", String.valueOf(punch.getAdjustedtimestamp()));
+            jsonData.add(punchData);
          }                  
+         json = JSONValue.toJSONString(jsonData);
          return json;
      }
 }
