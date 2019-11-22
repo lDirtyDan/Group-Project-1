@@ -126,7 +126,7 @@ public class Punch {
         s.append(": ");
         s.append(sdf.format(gc.getTime()).toUpperCase());
         s.append(" ");
-        s.append(adjustmenttype);
+        s.append("("+ adjustmenttype + ")");
          
         return s.toString();
     }
@@ -222,7 +222,7 @@ public class Punch {
         HashMap<String,Long> timeCheck = new HashMap<String,Long>();
         ArrayList<LocalTime> timeClock = new ArrayList<LocalTime>();
         String[] timeType = new String[]{"start","lunchStart","lunchStop","stop"};
-        String[] adjType = new String[]{"(Shift Start)","(Shift Stop)","(Shift Dock)","(Lunch Start)","(Lunch Stop)","(Interval Round)","(None)"};
+        String[] adjType = new String[]{"Shift Start","Shift Stop","Shift Dock","Lunch Start","Lunch Stop","Interval Round","None"};
         
         timeClock.add(adjShift.getStart());                           
         timeClock.add(adjShift.getLunchStart());                     

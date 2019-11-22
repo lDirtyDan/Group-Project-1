@@ -18,7 +18,7 @@ public class TASLogic {
             int punchType = punch.getPunchtypeid();
             if(punchType != 3){
                 adjType = punch.getAdjustmenttype();
-                if(adjType.equals("(Lunch Start)") || adjType.equals("(Lunch Stop)") || adjType.equals("(None)")){
+                if(adjType.equals("Lunch Start") || adjType.equals("Lunch Stop") || adjType.equals("None")){
                     lunchCheck = true;
                 }
                 
@@ -49,14 +49,13 @@ public class TASLogic {
          ArrayList<HashMap<String, String>> jsonData = new ArrayList();
          for (Punch punch : dailypunchlist){
             HashMap<String, String> punchData = new HashMap<>();
-            punchData.put("ID", String.valueOf(punch.getId()));
-            punchData.put("Badgeid", String.valueOf(punch.getBadgeid()));
-            punchData.put("Badgetypieid", String.valueOf(punch.getPunchtypeid()));
-            punchData.put("TerminalID", String.valueOf(punch.getTerminalid()));
-            punchData.put("Punchtypieid", String.valueOf(punch.getPunchtypeid()));
-            punchData.put("Punchdata", String.valueOf(punch.getPunchDescriptions()));
+            punchData.put("badgeid", String.valueOf(punch.getBadgeid()));
+            punchData.put("terminalid", String.valueOf(punch.getTerminalid()));
+            punchData.put("punchtypeid", String.valueOf(punch.getPunchtypeid()));
+            punchData.put("punchdata", String.valueOf(punch.getAdjustmenttype()));
             punchData.put("originaltimestamp", String.valueOf(punch.getOriginaltimestamp()));
             punchData.put("adjustedtimestamp", String.valueOf(punch.getAdjustedtimestamp()));
+            punchData.put("id", String.valueOf(punch.getId()));
             jsonData.add(punchData);
          }                  
          json = JSONValue.toJSONString(jsonData);

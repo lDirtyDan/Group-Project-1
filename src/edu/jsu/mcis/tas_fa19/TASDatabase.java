@@ -193,6 +193,8 @@ public class TASDatabase {
                         punchType = resultset.getInt("punchtypeid");
                             
                         punchDB = new Punch(getBadge(badgeID), termID, punchType);
+                        
+                        punchDB.setId(id);
                             
                         punchDB.setOriginalTimeStamp(timeStamp);        
                     }
